@@ -15,60 +15,73 @@ interface StoreDto {
 
 export default function StoreSelectPage() {
   const [stores, setStores] = useState<StoreDto[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const fetchStores = async () => {
       const token = authService.getToken();
-      if (!token) return router.push('/login');
+      if (!token) return router.push('/login'); // 토큰 없으면 로그인으로
 
-      const res = await fetch('http://localhost:8080/api/stores', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      try {
+        const res = await fetch('http://localhost:8080/api/stores', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      const data = await res.json();
-      setStores(data);
+        if (!res.ok) throw new Error('매장을 가져오는 데 실패했습니다.');
+
+        const data: StoreDto[] = await res.json();
+        setStores(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchStores();
   }, [router]);
 
+  if (loading) return <p className="text-center mt-12">로딩 중...</p>;
+
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12">
+    <div className="max-w-5xl mx-auto px-6 pt-20 py-12">
       <h1 className="text-2xl font-bold mb-6">매장을 선택하세요</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {stores.map((store) => (
-          <Card
-            key={store.id}
-            onClick={() => {
-              authService.setCurrentStore(store.id);
-              router.push('/dashboard');
-            }}
-            className="cursor-pointer hover:shadow-xl transition rounded-3xl"
-          >
-            <CardHeader className="flex flex-row items-center gap-4">
-              <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
-                <Store className="text-white" />
-              </div>
-              <CardTitle>{store.storeName}</CardTitle>
-            </CardHeader>
+      {stores.length === 0 ? (
+        <p>등록된 매장이 없습니다.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {stores.map((store) => (
+            <Card
+              key={store.id}
+              onClick={() => {
+                authService.setCurrentStore(store.id); // 선택 매장 저장
+                router.push(`/store/${store.id}`);     // 동적 라우팅
+              }}
+              className="cursor-pointer hover:shadow-xl transition rounded-3xl"
+            >
+              <CardHeader className="flex flex-row items-center gap-4">
+                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                  <Store className="text-white" />
+                </div>
+                <CardTitle>{store.storeName}</CardTitle>
+              </CardHeader>
 
-            <CardContent className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                {store.storeAddress}
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                {store.storePhone}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              <CardContent className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  {store.storeAddress}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  {store.storePhone}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -46,8 +46,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* 로고 영역 */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-3xl shadow-lg mb-4">
-            <Briefcase className="w-8 h-8 text-white" />
+                <div className="flex flex-col items-center mb-12 text-center">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl shadow-lg mb-6 overflow-hidden">
+                <img
+                  src="/al-bam.png"          // 이미지 경로
+                  alt="Logo"
+                  className="object-contain"
+                />
+            </div>
           </div>
           <h1 className="text-3xl font-bold">al-bam</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -75,21 +81,21 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black h-12"
-
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="password">비밀번호를 입력해주세요.</Label>
                 <Input
-                  id="password"
-                  type="password"
-                  placeholder="8자 이상 ~ 20자 이하, 영문, 숫자, 특수문자 포함"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black h-12"
-                  required
-                />
+                id="password"
+                type="password"
+                placeholder="8자 이상 ~ 20자 이하, 영문, 숫자, 특수문자 포함"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full rounded border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black h-12"
+              />
+
               </div>
 
               {error && (

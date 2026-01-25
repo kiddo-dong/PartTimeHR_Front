@@ -57,11 +57,12 @@ export default function SignupPage() {
       >
         <h1 className="text-xl font-bold text-center">사장 회원가입</h1>
 
+        사장님 이메일과 비밀번호를 입력해주세요.
         <input
           name="email"
           placeholder="이메일"
           onChange={handleChange}
-          className="input"
+          className="input text-sm"
         />
 
         <input
@@ -79,7 +80,7 @@ export default function SignupPage() {
           onChange={handleChange}
           className="input"
         />
-
+        사장님 이름과 휴대폰 번호를 입력해주세요.
         <input
           name="name"
           placeholder="이름"
@@ -94,8 +95,7 @@ export default function SignupPage() {
           className="input"
         />
 
-        <hr />
-
+        매장 정보를 입력해주세요.
         <input
           name="storeName"
           placeholder="매장명"
@@ -116,7 +116,7 @@ export default function SignupPage() {
           onChange={handleChange}
           className="input"
         />
-
+        주 시작 요일을 선택해주세요.(주휴수당 계산에 사용됩니다.)
         <select
           name="weekStartDay"
           onChange={handleChange}
@@ -138,7 +138,7 @@ export default function SignupPage() {
             checked={form.weeklyPayApplicable}
             onChange={handleChange}
           />
-          주휴수당 적용
+          주휴수당을 적용하나요?
         </label>
 
         <button
