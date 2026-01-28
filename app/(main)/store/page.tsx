@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useStore } from '@/app/providers/StoreProvider';
 import { authService } from '@/app/utils/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Store, MapPin, Phone } from 'lucide-react';
@@ -17,23 +18,27 @@ export default function StoreSelectPage() {
   const [stores, setStores] = useState<StoreDto[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { currentStoreId } = useStore();
 
   useEffect(() => {
     const fetchStores = async () => {
       const token = authService.getToken();
-      if (!token) return router.push('/login'); // 토큰 없으면 로그인으로
+      if (!token) {
+        router.replace('/login');
+        return;
+      }
 
       try {
         const res = await fetch('http://localhost:8080/api/stores', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!res.ok) throw new Error('매장을 가져오는 데 실패했습니다.');
+        if (!res.ok) throw new Error('매장 조회 실패');
 
         const data: StoreDto[] = await res.json();
         setStores(data);
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
@@ -42,10 +47,12 @@ export default function StoreSelectPage() {
     fetchStores();
   }, [router]);
 
-  if (loading) return <p className="text-center mt-12">로딩 중...</p>;
+  if (loading) {
+    return <p></p>;
+  }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 pt-20 py-12">
+    <div className="max-w-5xl mx-auto px-6 py-12">
       <h1 className="text-2xl font-bold mb-6">매장을 선택하세요</h1>
 
       {stores.length === 0 ? (
@@ -57,7 +64,7 @@ export default function StoreSelectPage() {
               key={store.id}
               onClick={() => {
                 authService.setCurrentStore(store.id); // 선택 매장 저장
-                router.push(`/store/${store.id}`);     // 동적 라우팅
+                router.push(`/store/${store.id}/dashboard`); // 변경: 대시보드로 이동
               }}
               className="cursor-pointer hover:shadow-xl transition rounded-3xl"
             >

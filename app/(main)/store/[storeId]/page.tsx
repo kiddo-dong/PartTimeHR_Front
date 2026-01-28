@@ -21,6 +21,7 @@ export default function StoreSchedulePage() {
   const [schedules, setSchedules] = useState<ScheduleResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const storeName = params.storeName;
 
   useEffect(() => {
     async function fetchSchedules() {
@@ -55,7 +56,7 @@ export default function StoreSchedulePage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">매장 {storeId} 오늘 스케줄</h1>
+      <h1 className="text-2xl font-bold mb-6"> 오늘 스케줄</h1>
 
       {schedules.length === 0 ? (
         <p>오늘 등록된 스케줄이 없습니다.</p>
