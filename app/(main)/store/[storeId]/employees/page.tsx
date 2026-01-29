@@ -28,7 +28,7 @@ export default function EmployeeManagePage() {
     const fetchEmployees = async () => {
       try {
         const token = authService.getToken();
-        const res = await fetch(`http://localhost:8080/api/employees/${storeId}/all`, {
+        const res = await fetch(`http://localhost:8080/api/stores/${storeId}/employees/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('직원 목록을 불러오지 못했습니다.');

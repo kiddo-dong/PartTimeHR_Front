@@ -15,12 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={bmHannaPro.variable}>
       <body className="flex flex-col min-h-screen">
-        <AuthProvider>
-          <StoreProvider>
             <main className="flex-1">{children}</main>
             <Footer />
-          </StoreProvider>
-        </AuthProvider>
       </body>
     </html>
   );

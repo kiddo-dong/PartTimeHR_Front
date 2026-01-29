@@ -42,7 +42,7 @@ export default function DashboardPage() {
         setStore(storeData);
 
         // 직원 요약
-        const empRes = await fetch(`http://localhost:8080/api/employees/${storeId}/all`, {
+        const empRes = await fetch(`http://localhost:8080/api/stores/${storeId}/employees/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const empData = await empRes.json();
