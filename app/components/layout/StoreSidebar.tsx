@@ -6,14 +6,20 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/app/providers/StoreProvider';
 
+interface Menu {
+  title: string;
+  basePath: string;
+  subs: { title: string; path: string }[];
+}
+
 export default function StoreSidebar() {
   const { currentStoreId } = useStore();
   const pathname = usePathname();
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
-  if (!currentStoreId) return null;
+  /** ✅ 여러 메뉴 열림 상태 관리 */
+  const [openMenus, setOpenMenus] = useState<Set<string>>(new Set());
 
-  const menus = [
+  const menus: Menu[] = [
     {
       title: '대시보드',
       basePath: 'dashboard',
@@ -52,13 +58,28 @@ export default function StoreSidebar() {
     },
   ];
 
-  /** 현재 경로 기준으로 메뉴 자동 열림 */
+  /**
+   * ✅ URL 직접 접근 / 새로고침 시
+   * 해당 메뉴는 "자동으로 열어주기만"
+   * (기존에 열려있던 건 절대 닫지 않음)
+   */
   useEffect(() => {
-    const found = menus.find((m) =>
-      pathname.includes(`/${m.basePath}`)
+    if (!currentStoreId) return;
+
+    const found = menus.find((menu) =>
+      pathname.includes(`/${menu.basePath}`)
     );
-    if (found) setOpenMenu(found.basePath);
-  }, [pathname]);
+
+    if (found) {
+      setOpenMenus((prev) => {
+        const next = new Set(prev);
+        next.add(found.basePath);
+        return next;
+      });
+    }
+  }, [pathname, currentStoreId]);
+
+  if (!currentStoreId) return null;
 
   return (
     <aside className="w-60 bg-[#F7F0E0] p-6 fixed h-full">
@@ -66,7 +87,7 @@ export default function StoreSidebar() {
 
       <nav className="flex flex-col gap-4 text-sm">
         {menus.map((menu) => {
-          const opened = openMenu === menu.basePath;
+          const opened = openMenus.has(menu.basePath);
           const baseUrl = `/store/${currentStoreId}/${menu.basePath}`;
 
           return (
@@ -74,10 +95,20 @@ export default function StoreSidebar() {
               {/* 상위 메뉴 */}
               <button
                 onClick={() =>
-                  setOpenMenu(opened ? null : menu.basePath)
+                  setOpenMenus((prev) => {
+                    const next = new Set(prev);
+                    opened
+                      ? next.delete(menu.basePath)
+                      : next.add(menu.basePath);
+                    return next;
+                  })
                 }
                 className={`w-full flex items-center justify-between font-medium transition-colors
-                  ${opened ? 'text-black' : 'text-gray-600 hover:text-black'}
+                  ${
+                    opened
+                      ? 'text-black'
+                      : 'text-gray-600 hover:text-black'
+                  }
                 `}
               >
                 {menu.title}
@@ -108,9 +139,11 @@ export default function StoreSidebar() {
                           key={sub.path}
                           href={fullPath}
                           className={`relative pl-3 py-1 rounded transition-all
-                            ${active
-                              ? 'bg-white text-black font-semibold'
-                              : 'text-gray-500 hover:text-black hover:bg-white/60 hover:translate-x-1'}
+                            ${
+                              active
+                                ? 'bg-white text-black font-semibold'
+                                : 'text-gray-500 hover:text-black hover:bg-white/60 hover:translate-x-1'
+                            }
                           `}
                         >
                           {active && (
