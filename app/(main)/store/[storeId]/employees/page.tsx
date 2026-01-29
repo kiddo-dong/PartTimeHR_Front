@@ -56,9 +56,10 @@ export default function EmployeeManagePage() {
         <Button onClick={() => router.push(`/store/${storeId}/employees/new`)}>+ 직원 추가</Button>
       </div>
 
-      <div className="grid gap-4">
+      {/* 한 줄에 3개, 카드 높이 동일, 내용 스크롤 가능 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
         {employees.map((emp) => (
-          <Card key={emp.id}>
+          <Card key={emp.id} className="flex flex-col h-full">
             <CardHeader className="flex justify-between items-center">
               <div>
                 <CardTitle>{emp.name}</CardTitle>
@@ -66,14 +67,29 @@ export default function EmployeeManagePage() {
               </div>
               <div className="text-sm font-medium">시급 {emp.hourlyWage.toLocaleString()}원</div>
             </CardHeader>
-            <CardContent className="flex justify-between items-center">
+
+            {/* 내용 영역 스크롤 처리 */}
+            <CardContent className="flex flex-col justify-between mt-2 flex-1 overflow-auto">
               <div className="space-y-1 text-sm text-gray-600">
                 <div>e-mail: {emp.email}</div>
                 <div>전화번호: {emp.phone}</div>
+                {/* 필요시 추가 정보 길게 들어가도 스크롤됨 */}
               </div>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => router.push(`/store/${storeId}/employees/${emp.id}`)}>상세</Button>
-                <Button size="sm" variant="outline" onClick={() => router.push(`/store/${storeId}/employees/${emp.id}/edit`)}>수정</Button>
+              <div className="flex gap-2 mt-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => router.push(`/store/${storeId}/employees/${emp.id}`)}
+                >
+                  상세
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => router.push(`/store/${storeId}/employees/${emp.id}/edit`)}
+                >
+                  수정
+                </Button>
               </div>
             </CardContent>
           </Card>
