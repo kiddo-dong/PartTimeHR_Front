@@ -30,7 +30,7 @@ export default function EmployeeDetailPage() {
       try {
         const token = authService.getToken();
         const res = await fetch(
-          `http://localhost:8080/api/stores/${storeId}/employees/${employeeId}`,
+          `http://13.125.140.255/api/stores/${storeId}/employees/${employeeId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -2,12 +2,12 @@ const TOKEN_KEY = 'accessToken';
 const STORE_KEY = 'currentStoreId';
 
 export const authService = {
-  saveToken(token: string) {
+  setToken(token: string) {
     if (typeof window === 'undefined') return;
     localStorage.setItem(TOKEN_KEY, token);
   },
 
-  getToken() {
+  getToken(): string | null {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem(TOKEN_KEY);
   },
@@ -27,16 +27,5 @@ export const authService = {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(STORE_KEY);
-  },
-
-  logout() {
-    if (typeof window === 'undefined') return;
-    this.clear();
-    window.location.href = '/login';
-  },
-
-  setToken(token: string) {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(TOKEN_KEY, token);
   },
 };

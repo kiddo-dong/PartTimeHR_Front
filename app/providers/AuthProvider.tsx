@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useState, createContext, useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import { authService } from '@/app/utils/auth';
 
 interface Employer {
@@ -18,34 +19,37 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [employer, setEmployer] = useState<Employer | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const logout = () => {
-    authService.logout();
+    authService.clear();        // ✅ 토큰 삭제
     setEmployer(null);
-    window.location.href = '/login';
+    router.replace('/login');   // ✅ App Router 방식
   };
 
   useEffect(() => {
     async function loadMe() {
       try {
         const token = authService.getToken();
-        if (!token) throw new Error();
+        if (!token) throw new Error('no token');
 
-        const res = await fetch('http://localhost:8080/api/employers/me', {
+        const res = await fetch(`http://13.125.140.255/api/employers/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error('unauthorized');
 
         const data = await res.json();
         setEmployer(data);
       } catch {
-        logout();
+        logout(); // ✅ 여기서도 동일한 logout 사용
       } finally {
         setLoading(false);
       }

@@ -14,23 +14,34 @@ interface StoreDto {
   storeAddress: string;
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default function StoreSelectPage() {
   const [stores, setStores] = useState<StoreDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [checked, setChecked] = useState(false);
+
   const router = useRouter();
   const { currentStoreId } = useStore();
 
   useEffect(() => {
-    const fetchStores = async () => {
-      const token = authService.getToken();
-      if (!token) {
-        router.replace('/login');
-        return;
-      }
+    const token = authService.getToken();
 
+    // 🔐 인증 가드
+    if (!token) {
+      router.replace('/login');
+      return;
+    }
+
+    // ✅ 인증 확인 완료
+    setChecked(true);
+
+    const fetchStores = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/stores', {
-          headers: { Authorization: `Bearer ${token}` },
+        const res = await fetch(`http://13.125.140.255/api/stores`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (!res.ok) throw new Error('매장 조회 실패');
@@ -46,6 +57,11 @@ export default function StoreSelectPage() {
 
     fetchStores();
   }, [router]);
+
+  // ⛔ 인증 확인 전에는 아무 것도 렌더하지 않음
+  if (!checked) {
+    return null;
+  }
 
   if (loading) {
     return <p></p>;
@@ -63,8 +79,8 @@ export default function StoreSelectPage() {
             <Card
               key={store.id}
               onClick={() => {
-                authService.setCurrentStore(store.id); // 선택 매장 저장
-                router.push(`/store/${store.id}/dashboard`); // 변경: 대시보드로 이동
+                authService.setCurrentStore(store.id);
+                router.push(`/store/${store.id}/dashboard`);
               }}
               className="cursor-pointer hover:shadow-xl transition rounded-3xl"
             >

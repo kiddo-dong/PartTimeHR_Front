@@ -23,7 +23,7 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:8080/api/login', {
+      const res = await fetch('http://13.125.140.255/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -32,7 +32,7 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || '로그인 실패');
 
-      authService.saveToken(data.accessToken);
+      authService.setToken(data.accessToken);
       router.push('/store');
     } catch (err: any) {
       setError(err.message || '로그인 실패');
