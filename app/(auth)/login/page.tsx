@@ -127,9 +127,6 @@ export default function LoginPage() {
             </div>
           </CardContent>
         </Card>
-
-        <Footer />
-      
       </div>
     </div>
   );
