@@ -51,7 +51,7 @@ export default function DashboardPage() {
         // 오늘 스케줄 요약
         const today = new Date().toISOString().slice(0, 10);
         const schedRes = await fetch(`https://13.125.140.255/api/stores/${storeId}/schedules/date?workDate=${today}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` }, 
         });
         const schedData = await schedRes.json();
         setScheduleSummary({ todayShifts: schedData.length });
