@@ -43,7 +43,7 @@ export default function EmployeeCreatePage() {
       try {
         const token = authService.getToken();
         const res = await fetch(
-          `http://localhost:8080/api/stores/${storeId}/paypolicies`,
+          `http://13.125.140.255/api/stores/${storeId}/paypolicies`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

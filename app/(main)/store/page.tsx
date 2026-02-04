@@ -22,7 +22,7 @@ export default function StoreSelectPage() {
   const [checked, setChecked] = useState(false);
 
   const router = useRouter();
-  const { currentStoreId } = useStore();
+  const { currentStoreId, setCurrentStoreId } = useStore();
 
   useEffect(() => {
     const token = authService.getToken();
@@ -79,7 +79,7 @@ export default function StoreSelectPage() {
             <Card
               key={store.id}
               onClick={() => {
-                authService.setCurrentStore(store.id);
+                setCurrentStoreId(store.id);
                 router.push(`/store/${store.id}/dashboard`);
               }}
               className="cursor-pointer hover:shadow-xl transition rounded-3xl"

@@ -18,14 +18,25 @@ interface EmployeeInfoResponse {
 }
 
 export default function EmployeeDetailPage() {
-  const { storeId, employeeId } = useParams();
+  const params = useParams();
   const router = useRouter();
+
+  // useParams에서 가져온 값이 배열일 수 있으므로 문자열로 변환
+  const storeId = Array.isArray(params.storeId) ? params.storeId[0] : params.storeId;
+  const employeeId = Array.isArray(params.employeeId) ? params.employeeId[0] : params.employeeId;
 
   const [employee, setEmployee] = useState<EmployeeInfoResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // employeeId가 없으면 API 호출하지 않음
+    if (!storeId || !employeeId) {
+      setError('직원 ID를 찾을 수 없습니다.');
+      setLoading(false);
+      return;
+    }
+
     async function fetchEmployee() {
       try {
         const token = authService.getToken();
@@ -103,8 +114,12 @@ export default function EmployeeDetailPage() {
               목록
             </Button>
 
-            <Button variant="outline">
-              정보 수정
+            <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => router.push(`/store/${storeId}/employees/${employee.id}/edit`)}
+                >
+                  정보 수정
             </Button>
 
             <Button variant="destructive">
