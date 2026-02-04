@@ -92,7 +92,7 @@ export default function EmployeeCreatePage() {
 
 
       const res = await fetch(
-        `http://13.125.140.255/api/stores/${storeId}/employees`,
+        `https://13.125.140.255/api/stores/${storeId}/employees`,
         {
           method: 'POST',
           headers: {

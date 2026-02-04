@@ -23,7 +23,7 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const res = await fetch('http://13.125.140.255/api/login', {
+      const res = await fetch('https://13.125.140.255/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

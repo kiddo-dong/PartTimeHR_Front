@@ -33,7 +33,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch('http://13.125.140.255/api/auth/signup', {
+    const res = await fetch('https://13.125.140.255/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

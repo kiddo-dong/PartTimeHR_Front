@@ -95,7 +95,7 @@ export default function EmployeeEditPage() {
       }
 
       const res = await fetch(
-        `http://13.125.140.255/api/stores/${storeId}/employees/${employeeId}`,
+        `https://13.125.140.255/api/stores/${storeId}/employees/${employeeId}`,
         {
           method: 'PUT',
           headers: {
