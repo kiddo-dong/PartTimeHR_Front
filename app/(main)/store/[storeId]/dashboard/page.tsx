@@ -69,6 +69,8 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <h1 className="text-2xl font-bold">메인</h1>
+      <p className="text-gray-600">매장 기본 정보, 연락처, 운영 시간 등을 설정하는 화면입니다.</p>
       {/* 매장 정보 */}
       {store && (
         <Card className="rounded-2xl shadow-md">

@@ -72,8 +72,7 @@ export default function StoreSidebar({ collapsed, setCollapsed }: StoreSidebarPr
       icon: '⚙️',
       subs: [
         { title: '매장 정보', path: 'store' },
-        { title: '근무 정책', path: 'policy' },
-        { title: '급여 설정', path: 'pay' },
+        { title: '급여 정책', path: 'paypolicy' },
       ],
     },
   ];
