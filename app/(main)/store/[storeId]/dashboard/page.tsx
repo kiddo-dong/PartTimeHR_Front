@@ -35,14 +35,14 @@ export default function DashboardPage() {
 
       try {
         // 매장 정보
-        const storeRes = await fetch(`https://13.125.140.255/api/stores/${storeId}`, {
+        const storeRes = await fetch(`http://13.125.140.255/api/stores/${storeId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const storeData = await storeRes.json();
         setStore(storeData);
 
         // 직원 요약
-        const empRes = await fetch(`https://13.125.140.255/api/stores/${storeId}/employees/all`, {
+        const empRes = await fetch(`http://13.125.140.255/api/stores/${storeId}/employees/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const empData = await empRes.json();
@@ -50,7 +50,7 @@ export default function DashboardPage() {
 
         // 오늘 스케줄 요약
         const today = new Date().toISOString().slice(0, 10);
-        const schedRes = await fetch(`https://13.125.140.255/api/stores/${storeId}/schedules/date?workDate=${today}`, {
+        const schedRes = await fetch(`http://13.125.140.255/api/stores/${storeId}/schedules/date?workDate=${today}`, {
           headers: { Authorization: `Bearer ${token}` }, 
         });
         const schedData = await schedRes.json();

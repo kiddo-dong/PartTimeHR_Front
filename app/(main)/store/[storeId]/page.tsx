@@ -29,7 +29,7 @@ export default function StoreSchedulePage() {
         const token = authService.getToken();
         const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
         const res = await fetch(
-          `https://13.125.140.255/api/stores/${storeId}/schedules/date?workDate=${today}`,
+          `http://13.125.140.255/api/stores/${storeId}/schedules/date?workDate=${today}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

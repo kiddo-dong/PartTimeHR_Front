@@ -38,7 +38,7 @@ export default function StoreSelectPage() {
 
     const fetchStores = async () => {
       try {
-        const res = await fetch(`https://13.125.140.255/api/stores`, {
+        const res = await fetch(`http://13.125.140.255/api/stores`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
