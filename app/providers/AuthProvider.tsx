@@ -38,7 +38,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         const token = authService.getToken();
         if (!token) throw new Error('no token');
 
-        const res = await fetch(`http://13.125.140.255/api/employers/me`, {
+        const res = await fetch(`http://3.37.87.159/api/employers/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

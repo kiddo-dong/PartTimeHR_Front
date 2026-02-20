@@ -39,7 +39,7 @@ export default function EmployeeEditPage() {
         const token = authService.getToken();
 
         const res = await fetch(
-          `http://13.125.140.255/api/stores/${storeId}/employees/${employeeId}`,
+          `http://3.37.87.159/api/stores/${storeId}/employees/${employeeId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ export default function EmployeeEditPage() {
       }
 
       const res = await fetch(
-        `http://13.125.140.255/api/stores/${storeId}/employees/${employeeId}`,
+        `http://3.37.87.159/api/stores/${storeId}/employees/${employeeId}`,
         {
           method: 'PUT',
           headers: {

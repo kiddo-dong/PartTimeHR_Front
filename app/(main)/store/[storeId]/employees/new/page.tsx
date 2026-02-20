@@ -43,7 +43,7 @@ export default function EmployeeCreatePage() {
       try {
         const token = authService.getToken();
         const res = await fetch(
-          `http://13.125.140.255/api/stores/${storeId}/paypolicies`,
+          `http://3.37.87.159/api/stores/${storeId}/paypolicies`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ export default function EmployeeCreatePage() {
 
 
       const res = await fetch(
-        `http://13.125.140.255/api/stores/${storeId}/employees`,
+        `http://3.37.87.159/api/stores/${storeId}/employees`,
         {
           method: 'POST',
           headers: {

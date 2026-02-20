@@ -14,8 +14,6 @@ interface StoreDto {
   storeAddress: string;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
-
 export default function StoreSelectPage() {
   const [stores, setStores] = useState<StoreDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +36,7 @@ export default function StoreSelectPage() {
 
     const fetchStores = async () => {
       try {
-        const res = await fetch(`http://13.125.140.255/api/stores`, {
+        const res = await fetch(`http://3.37.87.159/api/stores`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
