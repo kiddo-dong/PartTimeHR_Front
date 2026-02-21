@@ -26,7 +26,7 @@ interface Employee {
 
 export default function SchedulesDailyPage() {
   const params = useParams();
-  const storeId = Array.isArray(params.storeId) ? params.storeId[0] : params.storeId;
+  const storeId = typeof params?.storeId === 'string' ? params.storeId : Array.isArray(params?.storeId) ? params.storeId[0] : '';
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [schedules, setSchedules] = useState<ScheduleResponse[]>([]);
@@ -55,15 +55,18 @@ export default function SchedulesDailyPage() {
 
   // 스케줄 조회
   useEffect(() => {
+    if (!storeId) return;
     fetchSchedules();
   }, [storeId, selectedDate]);
 
   // 직원 목록 조회
   useEffect(() => {
+    if (!storeId) return;
     fetchEmployees();
   }, [storeId]);
 
   const fetchEmployees = async () => {
+    if (!storeId) return;
     try {
       const token = authService.getToken();
       const res = await fetch(`http://3.37.87.159/api/stores/${storeId}/employees/all`, {
@@ -78,6 +81,7 @@ export default function SchedulesDailyPage() {
   };
 
   const fetchSchedules = async () => {
+    if (!storeId) return;
     try {
       setLoading(true);
       const token = authService.getToken();
@@ -109,6 +113,7 @@ export default function SchedulesDailyPage() {
     });
   };
 
+  if (!storeId) return <p className="p-6 text-red-600">매장 정보를 찾을 수 없습니다.</p>;
   if (loading) return <p className="p-6">로딩 중...</p>;
   if (error) return <p className="p-6 text-red-600">{error}</p>;
 
@@ -117,7 +122,7 @@ export default function SchedulesDailyPage() {
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">일간 스케줄</h1>
+      <h1 className="text-2xl font-bold">일간 스케줄</h1>
           <p className="text-gray-600 mt-1">
             선택한 날짜의 직원 근무 스케줄을 관리하는 화면입니다.
           </p>

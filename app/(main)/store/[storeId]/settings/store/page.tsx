@@ -80,9 +80,9 @@ export default function StoreSettingsPage() {
           </p>
         </div>
         <Button onClick={() => router.push(`/store/${storeId}/settings/store/new`)}>
-          <Plus className="w-4 h-4 mr-2" />
-          매장 추가
-        </Button>
+            <Plus className="w-4 h-4 mr-2" />
+            매장 추가
+          </Button>
       </div>
 
       {/* 매장 목록 */}

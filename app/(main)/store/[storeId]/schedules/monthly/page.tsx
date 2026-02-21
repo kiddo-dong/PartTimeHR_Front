@@ -22,7 +22,7 @@ const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
 export default function SchedulesMonthlyPage() {
   const params = useParams();
-  const storeId = Array.isArray(params.storeId) ? params.storeId[0] : params.storeId;
+  const storeId = typeof params?.storeId === 'string' ? params.storeId : Array.isArray(params?.storeId) ? params.storeId[0] : '';
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [schedules, setSchedules] = useState<ScheduleResponse[]>([]);
@@ -87,10 +87,12 @@ export default function SchedulesMonthlyPage() {
 
   // 스케줄 조회 (월간)
   useEffect(() => {
+    if (!storeId) return;
     fetchMonthlySchedules();
   }, [storeId, monthOffset]);
 
   const fetchMonthlySchedules = async () => {
+    if (!storeId) return;
     try {
       setLoading(true);
       const token = authService.getToken();
@@ -131,6 +133,7 @@ export default function SchedulesMonthlyPage() {
     return date.toDateString() === today.toDateString();
   };
 
+  if (!storeId) return <p className="p-6 text-red-600">매장 정보를 찾을 수 없습니다.</p>;
   if (loading) return <p className="p-6">로딩 중...</p>;
   if (error) return <p className="p-6 text-red-600">{error}</p>;
 
@@ -139,7 +142,7 @@ export default function SchedulesMonthlyPage() {
       {/* 헤더 */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">월간 스케줄</h1>
+      <h1 className="text-2xl font-bold">월간 스케줄</h1>
           <p className="text-gray-600 mt-1">
             한 달 단위로 직원 근무 스케줄을 관리하는 화면입니다.
           </p>
