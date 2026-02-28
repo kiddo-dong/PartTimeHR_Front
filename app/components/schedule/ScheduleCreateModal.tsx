@@ -44,6 +44,7 @@ export default function ScheduleCreateModal({
   const fetchEmployees = async () => {
     try {
       const token = authService.getToken();
+      if (!token) throw new Error('로그인이 필요합니다. 다시 로그인해주세요.');
       const res = await fetch(`http://3.37.87.159/api/stores/${storeId}/employees/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -51,7 +52,7 @@ export default function ScheduleCreateModal({
       const data = await res.json();
       setEmployees(data.map((emp: any) => ({ id: emp.id, name: emp.name })));
     } catch (err: any) {
-      setError('직원 목록을 불러오는데 실패했습니다.');
+      setError(err.message || '직원 목록을 불러오는데 실패했습니다.');
     }
   };
 
@@ -72,16 +73,14 @@ export default function ScheduleCreateModal({
       setLoading(true);
       setError('');
       const token = authService.getToken();
-
-      // 날짜와 시간을 결합하여 LocalDateTime 형식으로 변환
-      const startDateTime = new Date(`${form.workDate}T${form.startTime}`);
-      const endDateTime = new Date(`${form.workDate}T${form.endTime}`);
+      if (!token) throw new Error('로그인이 필요합니다. 다시 로그인해주세요.');
 
       const payload = {
         employeeId: Number(form.employeeId),
         workDate: form.workDate,
-        startTime: startDateTime.toISOString(),
-        endTime: endDateTime.toISOString(),
+        // 백엔드 LocalDateTime에 맞춰 timezone(Z) 없이 전송
+        startTime: `${form.workDate}T${form.startTime}:00`,
+        endTime: `${form.workDate}T${form.endTime}:00`,
       };
 
       const res = await fetch(`http://3.37.87.159/api/stores/${storeId}/schedules`, {

@@ -60,14 +60,12 @@ export default function ScheduleEditModal({
       setLoading(true);
       setError('');
       const token = authService.getToken();
-
-      // 날짜와 시간을 결합하여 LocalDateTime 형식으로 변환
-      const startDateTime = new Date(`${form.workDate}T${form.startTime}`);
-      const endDateTime = new Date(`${form.workDate}T${form.endTime}`);
+      if (!token) throw new Error('로그인이 필요합니다. 다시 로그인해주세요.');
 
       const payload = {
-        startTime: startDateTime.toISOString(),
-        endTime: endDateTime.toISOString(),
+        // 백엔드 LocalDateTime에 맞춰 timezone(Z) 없이 전송
+        startTime: `${form.workDate}T${form.startTime}:00`,
+        endTime: `${form.workDate}T${form.endTime}:00`,
       };
 
       const res = await fetch(
@@ -91,6 +89,41 @@ export default function ScheduleEditModal({
       onClose();
     } catch (err: any) {
       setError(err.message || '스케줄 수정에 실패했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm('이 스케줄을 삭제하시겠습니까?');
+    if (!confirmed) return;
+
+    try {
+      setLoading(true);
+      setError('');
+      const token = authService.getToken();
+      if (!token) throw new Error('로그인이 필요합니다. 다시 로그인해주세요.');
+
+      const res = await fetch(
+        `http://3.37.87.159/api/stores/${storeId}/schedules/${schedule.scheduleId}/employees/${schedule.employeeId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || '스케줄 삭제에 실패했습니다.');
+      }
+
+      onSuccess();
+      onClose();
+    } catch (err: any) {
+      setError(err.message || '스케줄 삭제에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -152,13 +185,23 @@ export default function ScheduleEditModal({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              취소
+          <div className="flex justify-between gap-2 pt-4">
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              삭제
             </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? '수정 중...' : '수정'}
-            </Button>
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+                취소
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? '수정 중...' : '수정'}
+              </Button>
+            </div>
           </div>
         </form>
       </div>
